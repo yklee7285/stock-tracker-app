@@ -67,9 +67,10 @@
                         <Button mnemonicParsing="false" onAction="#handleAdd" text="Add" />
                         <Button mnemonicParsing="false" onAction="#handleEdit" text="Edit" />
                         <Button mnemonicParsing="false" onAction="#handleDelete" text="Delete" />
-                        <Button mnemonicParsing="false" text="Sold" />
+                        <Button mnemonicParsing="false" onAction="#handleSale" text="Sale" />
                      </buttons>
                   </ButtonBar>
+                  <Button layoutX="462.0" layoutY="21.0" mnemonicParsing="false" onAction="#handleSellHistory" text="Sell History" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="25.0" />
                </children>
             </AnchorPane>
         </items>

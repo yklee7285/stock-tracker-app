@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <AnchorPane prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="yklee7285.stocktrackerapp.view.StockEditDialogController">
    <children>
       <AnchorPane layoutX="76.0" layoutY="-10.0" prefHeight="300.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -44,8 +43,8 @@
             </GridPane>
             <ButtonBar layoutX="126.0" layoutY="247.0" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
                <buttons>
-                  <Button mnemonicParsing="false" text="Confirm" />
-                  <Button mnemonicParsing="false" text="Cancel" />
+                  <Button mnemonicParsing="false" onAction="#handleConfirm" text="Confirm" />
+                  <Button mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
                </buttons>
             </ButtonBar>
          </children>

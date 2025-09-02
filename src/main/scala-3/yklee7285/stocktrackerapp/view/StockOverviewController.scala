@@ -68,7 +68,7 @@ class StockOverviewController:
         )
         expectedProfitLabel.text <== Bindings.createStringBinding(
           () => f"${stock.calculateExpectedProfit}%.2f",
-          stock.buyPrice, stock.sellPrice
+          stock.buyPrice, stock.sellPrice, stock.quantity
         )
         noteLabel.text <== stock.note
 
@@ -133,3 +133,35 @@ class StockOverviewController:
         headerText = "No Item Selected"
         contentText = "Please select an item in the table."
       .showAndWait()
+
+  @FXML
+  def handleSale(action: ActionEvent): Unit =
+    val selectedIndex = stockTable.selectionModel().selectedIndex.value
+
+    val selectedStock = stockTable.selectionModel().selectedItem.value
+    if (selectedIndex >= 0) then
+      stockTable.items().remove(selectedIndex)
+      MainApp.soldList += selectedStock
+      val today = java.time.LocalDate.now()
+      selectedStock.date.value = today
+      // selectedStock.sell()
+      val alert = new Alert(AlertType.Information):
+        initOwner(MainApp.stage)
+        title = "Sale Confirmed"
+        headerText = s"${selectedStock.name.value} Sold"
+        contentText = "Good Job on Closing Sale!"
+      alert.showAndWait()
+    else
+      // Show alert popup if no stock selected
+      val alert = new Alert(AlertType.Warning):
+        initOwner(MainApp.stage)
+        title = "No Selection Made"
+        headerText = "No Item Selected"
+        contentText = "Please select an item in the table."
+      .showAndWait()
+
+
+  @FXML
+  def handleSellHistory(action: ActionEvent): Unit =
+    MainApp.showSoldOverview()
+

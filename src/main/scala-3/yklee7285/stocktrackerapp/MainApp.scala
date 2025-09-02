@@ -10,7 +10,7 @@ import scalafx.Includes.*
 import scalafx.collections.ObservableBuffer
 import scalafx.stage.Modality
 import yklee7285.stocktrackerapp.model.Stock
-import yklee7285.stocktrackerapp.view.{StockEditDialogController, StockOverviewController}
+import yklee7285.stocktrackerapp.view.{SoldOverviewController, StockEditDialogController, StockOverviewController}
 
 import java.net.URL
 
@@ -18,11 +18,13 @@ object MainApp extends JFXApp3:
 
   private var rootPane: Option[javafx.scene.layout.BorderPane] = None
   private var stockOverviewController: Option[StockOverviewController] = None
+  private var soldOverviewController: Option[SoldOverviewController] = None
   private var stockEditDialogController: Option[StockEditDialogController] = None
 
 
   val stockList = new ObservableBuffer[Stock]() // Buffer to store stock items
   stockList += new Stock("Karina Photocard", 1)
+  val soldList = new ObservableBuffer[Stock]() // Buffer to store sold items
 
 
   override def start(): Unit = {
@@ -51,6 +53,17 @@ object MainApp extends JFXApp3:
     stockOverviewController = Option(controller)
 
     rootPane.foreach(_.setCenter(stockOverview))
+
+  // Function to show sold overview page in RootPane
+  def showSoldOverview(): Unit =
+    val soldOverviewResource: URL = getClass.getResource("view/soldOverview.fxml")
+    val loader = new FXMLLoader(soldOverviewResource)
+    val soldOverview = loader.load[javafx.scene.layout.AnchorPane]()
+
+    val controller = loader.getController[SoldOverviewController]()
+    soldOverviewController = Option(controller)
+
+    rootPane.foreach(_.setCenter(soldOverview))
 
   // Function to show stock edit popup dialog
   def showStockEditDialog(stock: Stock): Boolean =

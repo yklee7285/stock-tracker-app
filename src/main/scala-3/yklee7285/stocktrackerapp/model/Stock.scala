@@ -17,7 +17,7 @@ class Stock(val _name: String, val _quantity: Integer):
   var note : StringProperty =  StringProperty("No Note Added")
 
   def calculateExpectedProfit: Float = {
-    sellPrice.value - buyPrice.value
+    (sellPrice.value - buyPrice.value) * quantity.value
   }
 
 

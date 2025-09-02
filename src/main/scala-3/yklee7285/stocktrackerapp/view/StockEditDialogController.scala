@@ -2,7 +2,7 @@ package yklee7285.stocktrackerapp.view
 
 import javafx.fxml.FXML
 import javafx.scene.control.TextField
-import scalafx.event.ActionEvent
+import javafx.event.ActionEvent
 import scalafx.stage.Stage
 import scalafx.Includes.*
 import scalafx.scene.control.Alert
