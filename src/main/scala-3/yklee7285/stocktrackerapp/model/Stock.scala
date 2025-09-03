@@ -74,7 +74,7 @@ class Stock(val _name: String, val _quantity: Integer) extends Database:
     else
       throw new Exception("Stock item does not exist in stockItems table")
 
-  // Delete stock from current table
+  // Delete stock from stockItems table
   def delete(): Try[Int] =
     if (isExist) then
       Try(DB autoCommit { implicit session =>
