@@ -31,7 +31,7 @@
                   <Label text="Quantity" GridPane.rowIndex="1" />
                   <Label text="Buy Price" GridPane.rowIndex="2" />
                   <Label text="Sell Price" GridPane.rowIndex="3" />
-                  <Label text="Received Date" GridPane.rowIndex="4" />
+                  <Label text="Date" GridPane.rowIndex="4" />
                   <Label text="Note" GridPane.rowIndex="5" />
                   <TextField fx:id="nameField" GridPane.columnIndex="1" />
                   <TextField fx:id="quantityField" GridPane.columnIndex="1" GridPane.rowIndex="1" />

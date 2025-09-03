@@ -10,7 +10,7 @@ import scalafx.Includes.*
 import scalafx.collections.ObservableBuffer
 import scalafx.stage.Modality
 import yklee7285.stocktrackerapp.model.Stock
-import yklee7285.stocktrackerapp.view.{SoldOverviewController, StockEditDialogController, StockOverviewController}
+import yklee7285.stocktrackerapp.view.{AboutController, SoldOverviewController, StockEditDialogController, StockOverviewController}
 
 import java.net.URL
 
@@ -20,7 +20,9 @@ object MainApp extends JFXApp3:
   private var stockOverviewController: Option[StockOverviewController] = None
   private var soldOverviewController: Option[SoldOverviewController] = None
   private var stockEditDialogController: Option[StockEditDialogController] = None
+  private var aboutController: Option[AboutController] = None
 
+  private val cssResource: URL = getClass.getResource("view/Stylesheet.css") // Get CSS Resource
 
   val stockList = new ObservableBuffer[Stock]() // Buffer to store stock items
   stockList += new Stock("Karina Photocard", 1)
@@ -39,6 +41,7 @@ object MainApp extends JFXApp3:
       title = "Stock Inventory App" // Set window title
       icons += new Image(getClass.getResource("/images/logo.png").toExternalForm)
       scene = new Scene():
+        stylesheets = Seq(cssResource.toExternalForm)
         root = rootPane.get // Set border pane from RootLayout.fxml as root of the scene
     showStockOverview() // Call function to show welcome page
   }
@@ -78,6 +81,7 @@ object MainApp extends JFXApp3:
       initOwner(stage)
       scene = new Scene:
         title = "Stock Edit Dialog"
+        stylesheets = Seq(cssResource.toExternalForm)
         root = pane
 
     controller.dialogStage = dialog
@@ -85,3 +89,22 @@ object MainApp extends JFXApp3:
     dialog.showAndWait()
 
     controller.confirmClicked
+
+  def showAbout(): Boolean =
+    val aboutResource = getClass.getResource("view/About.fxml")
+    val loader = new FXMLLoader(aboutResource)
+    loader.load();
+    val pane = loader.getRoot[javafx.scene.layout.AnchorPane]()
+    val controller = loader.getController[AboutController]()
+
+    val dialog = new Stage():
+      initModality(Modality.ApplicationModal)
+      initOwner(stage)
+      scene = new Scene:
+        title = "About"
+        stylesheets = Seq(cssResource.toExternalForm)
+        root = pane
+
+    controller.dialogStage = dialog
+    dialog.showAndWait()
+    controller.closeClicked
