@@ -126,8 +126,7 @@ class SoldOverviewController:
     if (selectedStock != null) then
       val confirmClicked = MainApp.showStockEditDialog(selectedStock)
       if (confirmClicked) then
-        // Update the sold item in database 
-        selectedStock.save() match
+        selectedStock.saveSoldItem() match
           case Success(x) =>
             soldTable.refresh()
             updateSummary()

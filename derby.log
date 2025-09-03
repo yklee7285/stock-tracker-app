@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Wed Sep 03 17:55:23 GMT+08:00 2025:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0199-0f00-a007-00000f3c2310 
+Wed Sep 03 18:24:55 GMT+08:00 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0199-0f1b-a958-00000f3be840 
 on database directory C:\Users\dariu\OneDrive\Documents\GitHub\stocktrackerapp\myDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5a07e868 
 Loaded from file:/C:/Users/dariu/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/apache/derby/derby/10.17.1.0/derby-10.17.1.0.jar
 java.vendor=Oracle Corporation
