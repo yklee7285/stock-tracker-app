@@ -10,6 +10,7 @@ import scalafx.scene.control.Alert.AlertType
 import yklee7285.stocktrackerapp.MainApp
 import yklee7285.stocktrackerapp.model.Stock
 import yklee7285.stocktrackerapp.util.DateUtil.*
+import scala.util.{Failure, Success}
 
 @FXML
 class StockOverviewController:
@@ -96,16 +97,34 @@ class StockOverviewController:
   def handleAdd(action: ActionEvent): Unit =
     val stock = new Stock("", 1)
     val confirmClicked = MainApp.showStockEditDialog(stock);
-    if (confirmClicked) then {
-      MainApp.stockList += stock
-    }
+    if (confirmClicked) then
+      stock.save() match
+        case Success(x) =>
+          MainApp.stockList += stock
+        case Failure(e) =>
+          val alert = new Alert(Alert.AlertType.Warning):
+            initOwner(MainApp.stage)
+            title = "Failed to Save"
+            headerText = "Database Error"
+            contentText = "Database problem failed to save changes"
+          .showAndWait()
 
   @FXML
   // Handle delete button
   def handleDelete(action: ActionEvent): Unit =
     val selectedIndex = stockTable.selectionModel().selectedIndex.value
+    val selectedStock = stockTable.selectionModel().selectedItem.value
     if (selectedIndex >= 0) then
-      stockTable.items().remove(selectedIndex)
+      selectedStock.delete() match
+        case Success(x) =>
+          stockTable.items().remove(selectedIndex)
+        case Failure(e) =>
+          val alert = new Alert(Alert.AlertType.Warning):
+            initOwner(MainApp.stage)
+            title = "Failed to Delete"
+            headerText = "Database Error"
+            contentText = "Database problem failed to delete item"
+          .showAndWait()
     else
       // Nothing selected.
       val alert = new Alert(AlertType.Warning):
@@ -122,9 +141,17 @@ class StockOverviewController:
     if (selectedStock != null) then
       val confirmClicked = MainApp.showStockEditDialog(selectedStock)
 
-      if (confirmClicked) then {
-        showStockDetails(Some(selectedStock))
-      }
+      if (confirmClicked) then
+        selectedStock.save() match
+          case Success(x) =>
+            showStockDetails(Some(selectedStock))
+          case Failure(e) =>
+            val alert = new Alert(Alert.AlertType.Warning):
+              initOwner(MainApp.stage)
+              title = "Failed to Save"
+              headerText = "Database Error"
+              contentText = "Database problem failed to save changes"
+            .showAndWait()
     else
       // Show alert popup if no item selected
       val alert = new Alert(Alert.AlertType.Warning):
@@ -137,20 +164,29 @@ class StockOverviewController:
   @FXML
   def handleSale(action: ActionEvent): Unit =
     val selectedIndex = stockTable.selectionModel().selectedIndex.value
-
     val selectedStock = stockTable.selectionModel().selectedItem.value
+
     if (selectedIndex >= 0) then
-      stockTable.items().remove(selectedIndex)
-      MainApp.soldList += selectedStock
-      val today = java.time.LocalDate.now()
-      selectedStock.date.value = today
-      // selectedStock.sell()
-      val alert = new Alert(AlertType.Information):
-        initOwner(MainApp.stage)
-        title = "Sale Confirmed"
-        headerText = s"${selectedStock.name.value} Sold"
-        contentText = "Good Job on Closing Sale!"
-      alert.showAndWait()
+      selectedStock.sell() match
+        case Success(x) =>
+          stockTable.items().remove(selectedIndex)
+          MainApp.soldList += selectedStock
+          val today = java.time.LocalDate.now()
+          selectedStock.date.value = today
+
+          val alert = new Alert(AlertType.Information):
+            initOwner(MainApp.stage)
+            title = "Sale Confirmed"
+            headerText = s"${selectedStock.name.value} Sold"
+            contentText = "Good Job on Closing Sale!"
+          alert.showAndWait()
+        case Failure(e) =>
+          val alert = new Alert(Alert.AlertType.Warning):
+            initOwner(MainApp.stage)
+            title = "Failed to Process Sale"
+            headerText = "Database Error"
+            contentText = "Database problem failed to process sale"
+          .showAndWait()
     else
       // Show alert popup if no stock selected
       val alert = new Alert(AlertType.Warning):
@@ -160,8 +196,6 @@ class StockOverviewController:
         contentText = "Please select an item in the table."
       .showAndWait()
 
-
   @FXML
   def handleSellHistory(action: ActionEvent): Unit =
     MainApp.showSoldOverview()
-

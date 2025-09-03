@@ -9,6 +9,7 @@ import yklee7285.stocktrackerapp.model.Stock
 import scalafx.Includes.*
 import scalafx.scene.control.Alert
 import scalafx.scene.control.Alert.AlertType
+import scala.util.{Failure, Success}
 
 import java.time.LocalDate
 
@@ -38,6 +39,7 @@ class SoldOverviewController:
   private var totalIncomeLabel: Label = null
   @FXML
   private var totalProfitLabel: Label = null
+
   // Initialize table to display contents
   def initialize(): Unit =
     soldTable.items = MainApp.soldList
@@ -95,8 +97,19 @@ class SoldOverviewController:
   // Handle delete button
   def handleDelete(action: ActionEvent): Unit =
     val selectedIndex = soldTable.selectionModel().selectedIndex.value
+    val selectedStock = soldTable.selectionModel().selectedItem.value
+
     if (selectedIndex >= 0) then
-      soldTable.items().remove(selectedIndex)
+      selectedStock.deleteFromSold() match
+        case Success(x) =>
+          soldTable.items().remove(selectedIndex)
+        case Failure(e) =>
+          val alert = new Alert(Alert.AlertType.Warning):
+            initOwner(MainApp.stage)
+            title = "Failed to Delete"
+            headerText = "Database Error"
+            contentText = "Database problem failed to delete sold item"
+          .showAndWait()
     else
       // Nothing selected.
       val alert = new Alert(AlertType.Warning):
@@ -112,6 +125,19 @@ class SoldOverviewController:
     val selectedStock = soldTable.selectionModel().selectedItem.value
     if (selectedStock != null) then
       val confirmClicked = MainApp.showStockEditDialog(selectedStock)
+      if (confirmClicked) then
+        // Update the sold item in database 
+        selectedStock.save() match
+          case Success(x) =>
+            soldTable.refresh()
+            updateSummary()
+          case Failure(e) =>
+            val alert = new Alert(Alert.AlertType.Warning):
+              initOwner(MainApp.stage)
+              title = "Failed to Save"
+              headerText = "Database Error"
+              contentText = "Database problem failed to save changes"
+            .showAndWait()
     else
       // Show alert popup if no item selected
       val alert = new Alert(Alert.AlertType.Warning):

@@ -11,6 +11,7 @@ import scalafx.collections.ObservableBuffer
 import scalafx.stage.Modality
 import yklee7285.stocktrackerapp.model.Stock
 import yklee7285.stocktrackerapp.view.{AboutController, SoldOverviewController, StockEditDialogController, StockOverviewController}
+import yklee7285.stocktrackerapp.util.Database
 
 import java.net.URL
 
@@ -25,11 +26,16 @@ object MainApp extends JFXApp3:
   private val cssResource: URL = getClass.getResource("view/Stylesheet.css") // Get CSS Resource
 
   val stockList = new ObservableBuffer[Stock]() // Buffer to store stock items
-  stockList += new Stock("Karina Photocard", 1)
   val soldList = new ObservableBuffer[Stock]() // Buffer to store sold items
 
-
   override def start(): Unit = {
+    // Initialize database
+    Database.setupDB()
+
+    // Load data from database
+    stockList ++= Stock.getAllStocks
+    soldList ++= Stock.getAllSoldItems
+
     // Get and store RootLayout FXML resource path
     val rootLayoutResource: URL = getClass.getResource("view/RootLayout.fxml")
     // Initialize loader and load the UI from RootLayout.fxml
